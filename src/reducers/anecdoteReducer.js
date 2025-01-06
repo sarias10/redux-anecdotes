@@ -1,3 +1,5 @@
+import { sortUtil } from "../utils"
+
 const anecdotesAtStart = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
@@ -35,6 +37,12 @@ const reducer = (state = initialState, action) => {
     }
     case 'NEW_ANECDOTE':
       return [...state, action.payload]
+    case 'SORT_ANECDOTES': {
+      console.log('antes de ordenar', state);
+      const newList = sortUtil([...state])
+      console.log('despues de ordenar', newList)
+      return newList
+    }
     default:
       return state
   }
@@ -52,6 +60,12 @@ export const createAnecdote = (content) => {
   return {
     type: 'NEW_ANECDOTE',
     payload: newNote
+  }
+}
+
+export const sortAnecdotes = () => {
+  return {
+    type: 'SORT_ANECDOTES',
   }
 }
 
