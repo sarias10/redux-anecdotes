@@ -1,3 +1,4 @@
+// logica de la store
 import { sortUtil } from "../utils"
 
 const anecdotesAtStart = [
