@@ -1,4 +1,5 @@
 // logica de la store
+import { createSlice } from "@reduxjs/toolkit"
 import { sortUtil } from "../utils"
 
 const anecdotesAtStart = [
@@ -22,10 +23,66 @@ const asObject = (anecdote) => {
 
 const initialState = anecdotesAtStart.map(asObject)
 
-const anecdoteReducer = (state = initialState, action) => {
-  switch(action.type) {
-    case 'VOTE_ANECDOTE': {
-      const id = action.payload.id
+// const anecdoteReducer = (state = initialState, action) => {
+//   switch(action.type) {
+//     case 'VOTE_ANECDOTE': {
+//       const id = action.payload.id
+//       const anecdoteToChange = state.find(n => n.id === id)
+//       const changedAnecdote = {
+//         ...anecdoteToChange,
+//         votes: anecdoteToChange.votes + 1
+//       }
+//       return state.map(anecdote =>
+//         anecdote.id !== id ? anecdote : changedAnecdote) 
+//     }
+//     case 'NEW_ANECDOTE':
+//       return [...state, action.payload]
+//     case 'SORT_ANECDOTES': {
+//       console.log('antes de ordenar', state);
+//       const newList = sortUtil([...state])
+//       console.log('despues de ordenar', newList)
+//       return newList
+//     }
+//     default:
+//       return state
+//   }
+// }
+
+// export const voteAnecdote = (id) => {
+//   return {
+//     type: 'VOTE_ANECDOTE',
+//     payload: { id }
+//   }
+// }
+
+// export const createAnecdote = (content) => {
+//   const newNote = asObject(content)
+//   return {
+//     type: 'NEW_ANECDOTE',
+//     payload: newNote
+//   }
+// }
+
+// export const sortAnecdotes = () => {
+//   return {
+//     type: 'SORT_ANECDOTES',
+//   }
+// }
+
+const anecdoteSlice = createSlice({
+  name: 'anecdotes',
+  initialState,
+  reducers: {
+    createAnecdote(state, action){
+      const newAnecdote = asObject(action.payload)
+      state.push(newAnecdote)
+    },
+    sortAnecdotes(state){
+      return sortUtil([...state])
+    },
+    voteAnecdote(state, action){
+      console.log(action);
+      const id = action.payload
       const anecdoteToChange = state.find(n => n.id === id)
       const changedAnecdote = {
         ...anecdoteToChange,
@@ -34,38 +91,8 @@ const anecdoteReducer = (state = initialState, action) => {
       return state.map(anecdote =>
         anecdote.id !== id ? anecdote : changedAnecdote) 
     }
-    case 'NEW_ANECDOTE':
-      return [...state, action.payload]
-    case 'SORT_ANECDOTES': {
-      console.log('antes de ordenar', state);
-      const newList = sortUtil([...state])
-      console.log('despues de ordenar', newList)
-      return newList
-    }
-    default:
-      return state
   }
-}
+})
 
-export const voteAnecdote = (id) => {
-  return {
-    type: 'VOTE_ANECDOTE',
-    payload: { id }
-  }
-}
-
-export const createAnecdote = (content) => {
-  const newNote = asObject(content)
-  return {
-    type: 'NEW_ANECDOTE',
-    payload: newNote
-  }
-}
-
-export const sortAnecdotes = () => {
-  return {
-    type: 'SORT_ANECDOTES',
-  }
-}
-
-export default anecdoteReducer
+export const { createAnecdote, sortAnecdotes, voteAnecdote } = anecdoteSlice.actions
+export default anecdoteSlice.reducer
