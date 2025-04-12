@@ -1,6 +1,7 @@
 // logica de la store
 import { createSlice } from "@reduxjs/toolkit"
 import { sortUtil } from "../utils"
+import anecdoteService from '../services/anecdotes'
 
 const anecdotesAtStart = [
   'If it hurts, do it more often',
@@ -99,4 +100,12 @@ const anecdoteSlice = createSlice({
 })
 
 export const { createAnecdote, sortAnecdotes, voteAnecdote, appendAnecdote, setAnecdotes } = anecdoteSlice.actions
+
+export const initializedAnecdotes = () => {
+  return async dispatch => {
+    const anecdotes = await anecdoteService.getAll()
+    dispatch(setAnecdotes(anecdotes))
+  }
+}
+
 export default anecdoteSlice.reducer
