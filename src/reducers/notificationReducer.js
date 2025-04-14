@@ -2,17 +2,15 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = 'render here notification...'
 
+let timeoutId
+
 const notificationSlice = createSlice({
     name: 'notifications',
     initialState,
     reducers: {
-        createAnecdoteNotification(state, action) {
+        setMessage(state, action){
             const content = action.payload
-            return `you created '${content}'`
-        },
-        voteAnecdoteNotification(state, action) {
-            const content = action.payload
-            return  `you voted '${content}'`
+            return `${content}`
         },
         deleteAnecdoteNotification(state, action) {
             return ''
@@ -20,19 +18,19 @@ const notificationSlice = createSlice({
     }
 })
 
-export const { createAnecdoteNotification, voteAnecdoteNotification, deleteAnecdoteNotification } = notificationSlice.actions
+export const { setMessage, deleteAnecdoteNotification } = notificationSlice.actions
 
-let timeoutId
 
-export const clearNotification = () => {
-    // toma dispatch como argumento. Esto es un "thunk", una función que puede despachar acciones de Redux de manera asíncrona.
+
+export const setNotification = (message, time) => { //tiempo en segundos
     return dispatch => {
-        if (timeoutId) {
+        dispatch(setMessage(message))
+        if (timeoutId) { // si hay un timeoutId, lo elimina
             clearTimeout(timeoutId)
         }
-        timeoutId = setTimeout(() => {
+        timeoutId = setTimeout(() => { // cada que se ejecuta setNotification cuando se vota, se establece un nuevo timeoutId, el anterior lo borra y este establece uno nuevo
             dispatch(deleteAnecdoteNotification())
-        }, 5000)
+        }, time*1000)
     }
 }
 
