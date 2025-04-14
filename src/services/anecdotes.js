@@ -13,4 +13,17 @@ const createNew = async (content) => {
   return response.data
 }
 
-export default { getAll, createNew }
+const updateAnecdote = async (anecdoteId, updatedVotes) => {
+  const object = { votes: updatedVotes }
+  const response = await axios.patch(`${baseUrl}/${anecdoteId}`,object)
+  return response.data
+}
+
+// const main = async () => {
+//   console.log('hello',await updateAnecdote("35e5", 250))
+// }
+
+// main()
+
+
+export default { getAll, createNew, updateAnecdote }
